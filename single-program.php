@@ -3,16 +3,9 @@
   get_header();
 
   while(have_posts()) {
-    the_post(); ?>
-    <div class="page-banner">
-      <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg') ?>);"></div>
-      <div class="page-banner__content container container--narrow">
-        <h1 class="page-banner__title"><?php the_title(); ?></h1>
-        <div class="page-banner__intro">
-          <p>DONT FORGET TO REPLACE ME LATER</p>
-        </div>
-      </div>  
-    </div>
+    the_post();
+    pageBanner();
+    ?>
 
     <div class="container container--narrow page-section">
           <div class="metabox metabox--position-up metabox--with-home-link">
@@ -35,7 +28,7 @@
                 )
             )
         ));
-        print_r($relatedProfessors);
+        
         if($relatedProfessors->have_posts()) {
             echo'<hr class="section-break">';
             echo '<h2 class="headline headline--medium">' . get_the_title() . ' Professors</h2>';
@@ -45,7 +38,7 @@
                 $relatedProfessors->the_post(); ?>
                 <li class="professor-card__list-item">
                   <a class="professor-card" href="<?php the_permalink(); ?>">
-                    <img class="professor-card__image" src="<?php the_post_thumbnail_url(); ?>" alt="">
+                    <img class="professor-card__image" src="<?php the_post_thumbnail_url('professorLandscape'); ?>" alt="">
                     <span class="professor-card__name"><?php the_title(); ?></span>
                   </a>
                 </li>
