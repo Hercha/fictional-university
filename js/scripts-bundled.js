@@ -10565,6 +10565,7 @@ var Search = function () {
         this.closeButton = (0, _jquery2.default)('.search-overlay__close');
         this.searchOverlay = (0, _jquery2.default)(".search-overlay");
         this.events();
+        this.isOverlayOpen = false;
     }
     // 2. events
     // on this.head feels cold, wearsHat
@@ -10575,20 +10576,40 @@ var Search = function () {
         value: function events() {
             this.openButton.on("click", this.openOverlay.bind(this));
             this.closeButton.on("click", this.closeOverlay.bind(this));
+            (0, _jquery2.default)(document).on("keydown", this.keyPressDispatcher.bind(this));
         }
 
         // 3. methods (function, action....)
         // wearsHat() {}
 
     }, {
+        key: 'keyPressDispatcher',
+        value: function keyPressDispatcher(e) {
+            // console.log(e.keyCode);
+
+            if (e.keyCode == 83 && !this.isOverlayOpen) {
+                this.openOverlay();
+            }
+
+            if (e.keyCode == 27 && this.isOverlayOpen) {
+                this.closeOverlay();
+            }
+        }
+    }, {
         key: 'openOverlay',
         value: function openOverlay() {
             this.searchOverlay.addClass("search-overlay--active");
+            (0, _jquery2.default)("body").addClass("body-no-scroll");
+            console.log("our open method just ran");
+            this.isOverlayOpen = true;
         }
     }, {
         key: 'closeOverlay',
         value: function closeOverlay() {
             this.searchOverlay.removeClass("search-overlay--active");
+            (0, _jquery2.default)("body").removeClass("body-no-scroll");
+            console.log("our close method jusr ran");
+            this.isOverlayOpen = false;
         }
     }]);
 
