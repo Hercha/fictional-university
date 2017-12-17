@@ -10614,6 +10614,9 @@ var MyNotes = function () {
                     thisNote.slideUp();
                     console.log("Congrats");
                     console.log(response);
+                    if (response.userNoteCount < 5) {
+                        (0, _jquery2.default)(".note-limit-message").removeClass("active");
+                    }
                 },
                 error: function error(response) {
                     console.log("Sorry");
@@ -10657,7 +10660,7 @@ var MyNotes = function () {
             var ourNewPost = {
                 'title': (0, _jquery2.default)(".new-note-title").val(),
                 'content': (0, _jquery2.default)(".new-note-body").val(),
-                'status': 'publish'
+                'status': 'private'
             };
 
             _jquery2.default.ajax({
@@ -10675,6 +10678,9 @@ var MyNotes = function () {
                     console.log(response);
                 },
                 error: function error(response) {
+                    if (response.responseText == "You have reached youre note limit.") {
+                        (0, _jquery2.default)(".note-limit-message").addClass("active");
+                    }
                     console.log("Sorry");
                     console.log(response);
                 }
