@@ -10527,21 +10527,57 @@ var Like = function () {
         value: function ourClickDispatcher(e) {
             var currentLikeBox = (0, _jquery2.default)(e.target).closest(".like-box");
 
-            if ((0, _jquery2.default)(currentLikeBox).data('exists') == 'yes') {
-                this.deleteLike();
+            if ((0, _jquery2.default)(currentLikeBox).attr('data-exists') == 'yes') {
+                this.deleteLike(currentLikeBox);
             } else {
-                this.creatLike();
+                this.creatLike(currentLikeBox);
             }
         }
     }, {
         key: "creatLike",
-        value: function creatLike() {
-            alert("create test message");
+        value: function creatLike(currentLikeBox) {
+            _jquery2.default.ajax({
+                beforeSend: function beforeSend(xhr) {
+                    xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+                },
+                url: universityData.root_url + '/wp-json/university/v1/manageLike',
+                type: 'POST',
+                data: { 'professorId': currentLikeBox.data('professor') },
+                success: function success(response) {
+                    currentLikeBox.attr('data-exists', 'yes');
+                    var likeCount = parseInt(currentLikeBox.find(".like-count").html(), 10);
+                    likeCount++;
+                    currentLikeBox.find(".like-count").html(likeCount);
+                    currentLikeBox.attr("data-like", response);
+                    console.log(response);
+                },
+                error: function error(response) {
+                    console.log(response);
+                }
+            });
         }
     }, {
         key: "deleteLike",
-        value: function deleteLike() {
-            alert("delete test message");
+        value: function deleteLike(currentLikeBox) {
+            _jquery2.default.ajax({
+                beforeSend: function beforeSend(xhr) {
+                    xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+                },
+                url: universityData.root_url + '/wp-json/university/v1/manageLike',
+                data: { 'like': currentLikeBox.attr('data-like') },
+                type: 'DELETE',
+                success: function success(response) {
+                    currentLikeBox.attr('data-exists', 'no');
+                    var likeCount = parseInt(currentLikeBox.find(".like-count").html(), 10);
+                    likeCount--;
+                    currentLikeBox.find(".like-count").html(likeCount);
+                    currentLikeBox.attr("data-like", '');
+                    console.log(response);
+                },
+                error: function error(response) {
+                    console.log(response);
+                }
+            });
         }
     }]);
 
